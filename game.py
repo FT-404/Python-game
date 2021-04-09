@@ -1,10 +1,10 @@
 from tkinter import *
 from time import *
-from random import randint
+from random import *
 from PIL import Image, ImageTk
 
 root = Tk()
-image = PhotoImage(file="pt.png")
+image = PhotoImage(file="pt2.png")
 root.title('Прямоугольник зеленый')
 root.geometry('1920x1080')
 root.configure(background='#fff')
@@ -13,7 +13,7 @@ img = Image.open("bg2.jpg")
 holst.img = ImageTk.PhotoImage(img)
 holst['image'] = holst.img
 lab = Label(bg='#6797ec', font="20")
-count = 0
+count = -1
 gameTimerLab = Label(bg='#6797ec', font='40')
 counter = Label(bg='#6797ec', font="20")
 
@@ -41,7 +41,7 @@ def Starter():
         timing = time()
         backTimer = ''
         lab.config(text=str(backTimer))
-        target.place(x=koordX(), y=koordY())
+        onTargetClick()
         root.update()
         counter.config(text='Счёт: ' + str(count))
         while gameTimer != 0:
@@ -70,20 +70,44 @@ def Starter():
 
 
 def koordX():
-    x = randint(0, 1800)
+    x = uniform(0.1, 0.75)
     return x
 
 
 def koordY():
-    y = randint(0, 960)
+    y = randint(90, 460)
     return y
 
 
+lives = 1
+flag = 0
+
+
 def onTargetClick():
+    global lives, flag
+    print(lives)
     global count
-    count += 1
-    counter.config(text='Счёт: ' + str(count))
-    target.place(x=koordX(), y=koordY())
+    if flag == 0:
+        count += 1
+        counter.config(text='Счёт: ' + str(count))
+    x = koordX()
+    y = koordY()
+    for i in range(19200):
+
+        target.place(x=i / x, y=y)
+
+        if int(target.place_info().get('x')) >= 1920:
+            lives -= 1
+            flag = 1
+
+            onTargetClick()
+        else:
+            flag = 0
+        root.update()
+        if lives <= 0:
+            target.place_forget()
+            print('You lose (:')
+            break
 
 
 def RecruitMod():
@@ -97,7 +121,7 @@ def MatchMod():
 
 
 btnRec = Button(
-    text='Режим "Новичек"',
+    text='Режим "Новичок"',
     background="#555",
     foreground="#ccc",
     padx="20",
