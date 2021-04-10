@@ -4,26 +4,28 @@ from random import *
 from PIL import Image, ImageTk
 
 root = Tk()
-image = PhotoImage(file="pt2.png")
+image = PhotoImage(file="bird2.png")
+image2 = PhotoImage(file="anim.png")
 root.title('Прямоугольник зеленый')
 root.geometry('1920x1080')
 root.configure(background='#fff')
+root.config(cursor='tcross')
 holst = Label(root, width=1920, height=1080, highlightbackground="#fff")
 img = Image.open("bg2.jpg")
 holst.img = ImageTk.PhotoImage(img)
 holst['image'] = holst.img
 lab = Label(bg='#6797ec', font="20")
-count = -1
+count = 0
 gameTimerLab = Label(bg='#6797ec', font='40')
 counter = Label(bg='#6797ec', font="20")
+lives = 1
+flag = 0
 
 
 def Starter():
     lab.place(x=950, y=20)
     counter.place_forget()
-    global backTimer
     backTimer = 4
-    gameTimer = 30
     btnRec.place_forget()
     btnMatch.place_forget()
     for x in range(4):
@@ -44,33 +46,24 @@ def Starter():
         onTargetClick()
         root.update()
         counter.config(text='Счёт: ' + str(count))
-        while gameTimer != 0:
-            if time() - timing > 1:
-                timing = time()
-                gameTimer -= 1
-                print(gameTimer)
-            gameTimerLab.config(text='Оставшееся время: ' + str(gameTimer))
-            root.update()
-
-        if gameTimer == 0:
+        global lives
+        if lives == 0:
+            lives = 1
             target.place_forget()
-
             if count % 10 == 1:
                 ans = ' очко!'
             elif count % 10 >= 2 and count % 10 <= 4:
                 ans = ' очка!'
             else:
                 ans = ' очков!'
-            counter.config(text='Вы набрали - ' + str(count) + ans)
-            counter.place(x=920, y=70)
-            gameTimer = ''
-            gameTimerLab.config(text=gameTimer)
-            btnRec.place(x=847.5, y=260)
-            btnMatch.place(x=847.5, y=300)
+        counter.config(text='Вы набрали - ' + str(count) + ans)
+        counter.place(x=890, y=70)
+        btnRec.place(x=847.5, y=260)
+        btnMatch.place(x=847.5, y=300)
 
 
 def koordX():
-    x = uniform(0.1, 0.75)
+    x = uniform(0.25, 0.75)
     return x
 
 
@@ -79,22 +72,22 @@ def koordY():
     return y
 
 
-lives = 1
-flag = 0
-
-
 def onTargetClick():
-    global lives, flag
-    print(lives)
-    global count
+    global lives, flag, count, image
     if flag == 0:
         count += 1
         counter.config(text='Счёт: ' + str(count))
     x = koordX()
     y = koordY()
-    for i in range(19200):
-
+    k = 50
+    for i in range(1920):
         target.place(x=i / x, y=y)
+        if int(target.place_info().get('x')) > k and int(target.place_info().get('x')) < k + 50:
+            target.config(image=image2)
+
+        elif int(target.place_info().get('x')) > k + 50 and int(target.place_info().get('x')) < k + 100:
+            target.config(image=image)
+            k += 100
 
         if int(target.place_info().get('x')) >= 1920:
             lives -= 1
@@ -106,17 +99,18 @@ def onTargetClick():
         root.update()
         if lives <= 0:
             target.place_forget()
-            print('You lose (:')
             break
 
 
 def RecruitMod():
+    global count
+    count -= 1
     Starter()
 
 
 def MatchMod():
     global count
-    count = 0
+    count = -1
     Starter()
 
 
