@@ -6,14 +6,15 @@ from PIL import Image, ImageTk
 root = Tk()
 image = PhotoImage(file="bird2.png")
 image2 = PhotoImage(file="anim.png")
+bg = PhotoImage(file="bg.png")
 root.title('Прямоугольник зеленый')
 root.geometry('1920x1080')
 root.configure(background='#fff')
 root.config(cursor='tcross')
-holst = Label(root, width=1920, height=1080, highlightbackground="#fff")
-img = Image.open("bg2.jpg")
-holst.img = ImageTk.PhotoImage(img)
-holst['image'] = holst.img
+holst = Label(root, width=1920, height=1080, highlightbackground="#fff", image=bg)
+# img = Image.open("bg2.jpg")
+# holst.img = ImageTk.PhotoImage(img)
+# holst['image'] = holst.img
 lab = Label(bg='#6797ec', font="20")
 count = 0
 gameTimerLab = Label(bg='#6797ec', font='40')
@@ -40,7 +41,6 @@ def Starter():
         sleep(1)
         counter.place(x=950, y=70)
         gameTimerLab.place(x=930, y=20)
-        timing = time()
         backTimer = ''
         lab.config(text=str(backTimer))
         onTargetClick()
