@@ -53,7 +53,7 @@ def Starter():
         counter.config(text='Счёт: ' + str(count))
         global lives
         if lives == 0:
-            lives = 1
+            lives = 3
             target.place_forget()
             if count % 10 == 1:
                 ans = ' очко!'
@@ -83,8 +83,8 @@ def onTargetClick():
     y = koordY()
     if ff == 10 * bosser - 1:
 
-        image = PhotoImage(file="i.png")
-        image2 = PhotoImage(file="i.png")
+        image = PhotoImage(file="edik-boss.png")
+        image2 = PhotoImage(file="edik-boss.png")
         ff += 1
         bosser += 1
 
